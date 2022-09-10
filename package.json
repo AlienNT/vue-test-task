@@ -5,11 +5,15 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "run": "npm run serve",
+    "fix": "npm run lint --fix"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
+    "vue-axios": "^3.4.1",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
@@ -40,7 +44,9 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "indent": ["error", 4]
+    }
   },
   "browserslist": [
     "> 1%",
