@@ -1,26 +1,63 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="v-main__wrapper">
+        <div class="v-header__wrapper">
+            <VHeader/>
+        </div>
+        <div class="v-main__wrapper">
+            <VMain/>
+        </div>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import VHeader from '@/components/VHeader'
+import VMain from '@/components/VMain'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name: 'App',
+    components: {
+        VMain,
+        VHeader
+    },
+    computed: {
+        token () {
+            return this.$store.getters['auth/GET_TOKEN']
+        }
+    },
+    watch: {
+        token: {
+            handler (e) {
+                localStorage.setItem('Token', e)
+            }
+        }
+    },
+    methods: {
+        getToken () {
+            return this.$store.dispatch('auth/fetchToken')
+        }
+    },
+    async created () {
+        console.log('getToken', await this.getToken())
+    }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import "assets/css/main";
+
+.v-main__wrapper {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.v-header__wrapper {
+    height: $headerHeight;
+}
+
+.v-main__wrapper {
+    flex: 1 1 auto;
+    overflow: auto;
 }
 </style>
