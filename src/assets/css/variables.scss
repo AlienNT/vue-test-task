@@ -1,17 +1,26 @@
 $containerWidth: 1200px;
+$tinyScreen: 360px;
+$smallScreen: 768px;
+$mediumScreen: 1024px;
+$largeScreen: 2560px;
+
 $headerHeight: 60px;
 
 $backgroundColor: #f8f8f8;
 $primaryColor: #f4e041;
 $secondaryColor: #00bdd3;
+$inputTextColor: #7e7e7e;
+$errorColor: #cb3d40;
 
 
 $lightFontColor: #ffffff;
 $darkFontColor: rgba(0, 0, 0, 0.87);
 
 $headerBgColor: #ffffff;
+$cardBgColor:  #ffffff;
 
 $primaryBtnColor: $primaryColor;
+$hoverBtnColor: #ffe302;
 $disabledBtnColor: #b4b4b4;
 
 $fontFamily: 'Arial', sans-serif;
