@@ -1,5 +1,5 @@
 <template>
-    <div class="v-main__wrapper">
+    <div class="v-app__wrapper">
         <div class="v-header__wrapper">
             <VHeader/>
         </div>
@@ -44,20 +44,20 @@ export default {
 
 <style lang="scss">
 @import "assets/css/main";
-
-.v-main__wrapper {
+.v-app__wrapper {
     height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
+    background: $backgroundColor;
+}
+.v-main__wrapper {
+    height: 100%;
+    flex: 1 1 auto;
+    overflow: auto;
 }
 
 .v-header__wrapper {
     height: $headerHeight;
-}
-
-.v-main__wrapper {
-    flex: 1 1 auto;
-    overflow: auto;
 }
 </style>
