@@ -1,3 +1,6 @@
 export default {
-    users: []
+    usersData: {},
+    users: [],
+    route: '',
+    loading: null
 }
