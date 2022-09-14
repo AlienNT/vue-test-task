@@ -22,7 +22,7 @@ export default {
     name: 'VUsersList',
     props: {
         data: {
-            type: Object,
+            type: Array,
             default: null
         }
     },
@@ -32,6 +32,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.v-user-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.v-user-list__item {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    flex: 1 1 100%;
+    width: 100%;
+    @media all and (min-width: $smallScreen){
+        flex: 1 1 50%;
+        width: 50%;
+    }
+    @media all and (min-width: $mediumScreen){
+        flex: 1 1 calc(100% / 3);
+        width: calc(100% / 3);;
+    }
+    @media all and (min-width: $largeScreen){
+        flex: 1 1 calc(100% / 3);
+        width: calc(100% / 3);;
+    }
+}
 
 </style>
