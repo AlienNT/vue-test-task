@@ -89,14 +89,16 @@ export default {
 <style scoped lang="scss">
 .v-label {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .label-text {
     position: absolute;
     left: 12px;
     padding: 0 4px;
-    top: 0;
-    transform: translateY(100%);
+    top: 50%;
+    transform: translateY(-50%);
     font-weight: 400;
     font-size: 16px;
     color: $inputTextColor;
@@ -107,6 +109,7 @@ export default {
     background: $backgroundColor;
 }
 .label-moved {
+    top: 0;
     transform: translateY(-50%);
     font-weight: 500;
     font-size: 12px;
