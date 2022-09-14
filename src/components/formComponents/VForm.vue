@@ -1,5 +1,7 @@
 <template>
-<div></div>
+    <form class="v-form">
+        <slot name="form-components"></slot>
+    </form>
 </template>
 
 <script>
