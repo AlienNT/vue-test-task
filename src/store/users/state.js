@@ -2,5 +2,6 @@ export default {
     usersData: {},
     users: [],
     route: '',
-    loading: null
+    loading: null,
+    createdUserResponse: {}
 }

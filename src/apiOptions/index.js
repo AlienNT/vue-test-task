@@ -36,7 +36,7 @@ export const fieldNames = {
 export const host = 'https://frontend-test-assignment-api.abz.agency/api/v1'
 
 export const routes = {
-    USERS: `${getRoute(routesNames.USERS)}?page=1&count=6`,
+    USERS: getRoute(routesNames.USERS),
     POSITIONS: getRoute(routesNames.POSITIONS),
     TOKEN: getRoute(routesNames.TOKEN)
 }
@@ -46,16 +46,20 @@ function getRoute (routeName) {
 }
 
 export async function apiRequest (method, url, data) {
-    const config = {
-        headers: {
-            Token: localStorage.getItem('token')
-        }
+    const headers = {
+        Token: await getToken()
     }
 
     return await axios({
         method,
         url,
         data,
-        config
+        headers
+    })
+}
+
+async function getToken () {
+    return new Promise((resolve) => {
+        resolve(localStorage.getItem('Token'))
     })
 }

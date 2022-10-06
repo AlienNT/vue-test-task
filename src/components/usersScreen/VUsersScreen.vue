@@ -53,7 +53,7 @@ export default {
             return this.$store.getters['users/GET_LOADING_STATUS']
         },
         defaultRoute () {
-            return routes.USERS
+            return routes.USERS + '?page=1&count=6'
         },
         routeWithPaginate () {
             return this.$store.getters['users/GET_ROUTE']

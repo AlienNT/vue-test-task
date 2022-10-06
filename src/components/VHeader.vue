@@ -67,4 +67,7 @@ export default {
     justify-content: flex-end;
     gap: 10px;
 }
+.logo-wrapper {
+    margin-right: 14px;
+}
 </style>

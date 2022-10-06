@@ -1,5 +1,10 @@
 <template>
-    <div class="v-positions">
+    <div
+        class="v-positions"
+        :class="{
+            'field-error': errorMessage
+        }"
+    >
         <div class="v-position__title">Select your position</div>
         <div class="v-positions__list">
             <VRadio
@@ -8,22 +13,33 @@
                 @onInput="e => $emit('onInput', e)"
             />
         </div>
+        <VFieldError
+            :error-message="errorMessage"
+        />
     </div>
 </template>
 
 <script>
+import { errorMixin } from '@/components/errorMixin'
+import VFieldError from '@/components/formComponents/VFieldError'
 import VRadio from '@/components/formComponents/VRadio'
 
 export default {
     name: 'VPositionsList',
+    mixins: [errorMixin],
     props: {
         title: {
             type: String,
             default: null
+        },
+        errorMessage: {
+            type: Array,
+            default: null
         }
     },
     components: {
-        VRadio
+        VRadio,
+        VFieldError
     },
     computed: {
         positions () {
@@ -33,17 +49,6 @@ export default {
     methods: {
         fetchPositions () {
             return this.$store.dispatch('positions/fetchPositions')
-        },
-        onInput (e) {
-            console.log('onInput', e)
-        }
-    },
-    watch: {
-        positions: {
-            handler (e) {
-                console.log('positions', e)
-            },
-            immediate: true
         }
     },
     created () {

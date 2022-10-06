@@ -1,115 +1,153 @@
 <template>
     <div
-        class="v-file-picker"
+        class="file-picker__wrapper"
         :class="{
+            'field-error': isError
+        }"
+    >
+        <div
+            class="v-file-picker"
+            :class="{
             'validate-error': isError
         }"
-        @click.prevent.stop="upload"
-    >
-        <div class="v-file-picker__label">{{ label }}</div>
-        <div class="v-file-picker__name">
+            @click.prevent.stop="upload"
+        >
+            <div class="v-file-picker__label">{{ label }}</div>
+            <div class="v-file-picker__name">
             <span>
                 {{ fileName || placeholder }}
             </span>
+            </div>
         </div>
-    </div>
-<!--    предпросмотрщик, отключен по причине отсутствия в макете-->
-    <div class="test-img" v-if="fileData?.src && false">
-        <img :src="fileData?.src" alt="">
+<!--        <VFieldError-->
+<!--            :error-message="errorMessage || errors.errors"-->
+<!--        />-->
+<!--            предпросмотрщик -->
+        <div class="test-img" v-if="src && previewer">
+            <img :src="src" alt="">
+        </div>
     </div>
 </template>
 
 <script>
+import { errorMixin } from '@/components/errorMixin'
+// import VFieldError from '@/components/formComponents/VFieldError'
+
 export default {
     name: 'VFilePicker',
+    mixins: [errorMixin],
+    components: {
+        // VFieldError
+    },
     props: {
         label: {
             type: String,
             default: 'Upload'
         },
         extensions: {
-            type: String,
+            type: [Array],
             default: null
         },
         placeholder: {
             type: String,
             default: 'Upload your photo'
+        },
+        value: {
+            type: Object,
+            default: null
+        },
+        isError: {
+            type: Boolean,
+            default: false
+        },
+        fileName: {
+            type: String,
+            default: null
+        },
+        src: {
+            type: String,
+            default: null
+        },
+        previewer: {
+            type: Boolean,
+            default: false
         }
     },
+    emits: [
+        'uploadFile'
+    ],
     data () {
         return {
-            fileData: {
-                file: null,
-                src: null,
-                height: null,
-                width: null,
-                extension: null,
-                size: null,
-                name: null,
-                type: null,
-                lastModified: null
-            },
-            rules: {
-                size: {
-                    rule: 5242880,
-                    validate: () => this.fileData.size < this.rules.size.rule
-                },
-                naturalSize: {
-                    rule: {
-                        width: 70,
-                        height: 70
-                    },
-                    validate: () =>
-                        this.fileData.width > this.rules.naturalSize.rule.width ||
-                        this.fileData.height > this.rules.naturalSize.rule.height
-
-                },
-                extension: {
-                    rule: ['.jpg', '.jpeg'],
-                    validate: () => this.rules.extension.rule.find(item => item === this.fileData.extension)
-                }
-            },
-            errors: {
-                errors: {},
-                messages: {
-                    size: {
-                        message: () => `размер превышает ${this.byteToMb(this.rules.size.rule)} Мб`
-                    },
-                    naturalSize: {
-                        message: () => `размер превышает ${this.rules.naturalSize.rule.height}px на ${this.rules.naturalSize.rule.width}px`
-                    },
-                    extension: {
-                        message: () => 'неверный формат'
-                    }
-                }
-            }
+            // fileData: {
+            //     file: null,
+            //     src: null,
+            //     height: null,
+            //     width: null,
+            //     extension: null,
+            //     size: null,
+            //     name: null,
+            //     type: null,
+            //     lastModified: null
+            // }
+            // rules: {
+            //     size: {
+            //         rule: 5242880,
+            //         validate: () => this.fileData.size < this.rules.size.rule
+            //     },
+            //     naturalSize: {
+            //         rule: {
+            //             width: 70,
+            //             height: 70
+            //         },
+            //         validate: () =>
+            //             this.fileData.width > this.rules.naturalSize.rule.width ||
+            //             this.fileData.height > this.rules.naturalSize.rule.height
+            //
+            //     },
+            //     extension: {
+            //         rule: ['.jpg', '.jpeg'],
+            //         validate: () => this.rules.extension.rule.find(item => item === this.fileData.extension)
+            //     }
+            // },
+            // errors: {
+            //     errors: {},
+            //     messages: {
+            //         size: {
+            //             message: () => `размер превышает ${this.byteToMb(this.rules.size.rule)} Мб`
+            //         },
+            //         naturalSize: {
+            //             message: () => `размер превышает ${this.rules.naturalSize.rule.height}px на ${this.rules.naturalSize.rule.width}px`
+            //         },
+            //         extension: {
+            //             message: () => 'неверный формат'
+            //         }
+            //     }
+            // }
         }
     },
     computed: {
-        fileName () {
-            return this.fileData?.file?.name
-        },
-        isError () {
-            const keys = Object.keys(this.errors.errors)
-
-            return keys.filter(key => this.errors.errors[key] !== null)?.length
-        }
+        // isError () {
+        //     const keys = Object.keys(this.errors.errors)
+        //
+        //     return keys.filter(key => this.errors.errors[key] !== null)?.length
+        // }
     },
     methods: {
         async upload () {
             const file = await this.uploadFile()
-            await this.setFileData(file)
-            await this.validate()
-            if (this.isError) {
-                return null
-            }
-            this.$emit('uploadFile', this.fileData)
+            this.$emit('uploadFile', file)
+            // await this.setFileData(file)
+            // await this.validate()
+            // if (this.isError) {
+            //     return null
+            // }
+            // this.$emit('uploadFile', this.fileData)
         },
         async uploadFile () {
             const input = document.createElement('input')
 
             input.setAttribute('type', 'file')
-            input.setAttribute('accept', this.extensions)
+            input.setAttribute('accept', this.extensions.map(extension => '.' + extension).join(', '))
             input.click()
 
             const file = await new Promise((resolve) => {
@@ -121,59 +159,21 @@ export default {
                 input.remove()
             }
             return file
-        },
-        async setFileData (file) {
-            const image = await this.fileReader(file)
-
-            this.fileData.file = file
-            this.fileData.width = image?.naturalWidth
-            this.fileData.height = image?.naturalHeight
-            this.fileData.src = image.getAttribute('src')
-            this.fileData.size = file?.size
-            this.fileData.type = file?.type
-            this.fileData.lastModified = this.file?.lastModified
-            this.fileData.name = this.getName(file?.name)
-            this.fileData.extension = this.getExtension(file?.name)
-
-            console.log('fileData', this.fileData)
-        },
-        validate () {
-            const keys = Object.keys(this.rules)
-            keys.forEach(key => {
-                if (!this.rules[key].validate()) {
-                    this.setError(key, this.errors.messages[key].message())
-                } else {
-                    this.setError(key)
-                }
-            })
-        },
-        setError (name, value = null) {
-            this.errors.errors[name] = value
-        },
-        getName (string) {
-            const index = string.indexOf('.')
-            return index > -1 ? string.slice(0, index) : string
-        },
-        getExtension (string) {
-            const index = string.indexOf('.')
-            return index > -1 ? string.slice(index) : null
-        },
-        fileReader (file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader()
-
-                reader.onload = (e) => {
-                    const image = document.createElement('img')
-                    image.setAttribute('src', e.target.result)
-
-                    resolve(image)
-                }
-                reader.readAsDataURL(file)
-            })
-        },
-        byteToMb (value) {
-            return value / 1048576
         }
+        // validate () {
+        //     const keys = Object.keys(this.rules)
+        //     keys.forEach(key => {
+        //         if (!this.rules[key].validate()) {
+        //             this.setError(key, this.errors.messages[key].message())
+        //         } else {
+        //             this.setError(key)
+        //         }
+        //     })
+        //     console.log('validate', this.errors.errors)
+        // },
+        // setError (name, value = null) {
+        //     this.errors.errors[name] = value
+        // },
     }
 }
 </script>
@@ -210,6 +210,7 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     color: $inputTextColor;
+
     span {
         width: 100%;
         text-overflow: ellipsis;
@@ -222,6 +223,7 @@ export default {
     padding-right: 100%;
     padding-bottom: 100%;
     position: relative;
+
     img {
         top: 0;
         left: 0;

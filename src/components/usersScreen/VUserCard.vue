@@ -23,11 +23,15 @@
         <li class="user-card__item user-card__phone">
             {{ userPhone }}
         </li>
+        <li class="user-card__item user-card__date">
+            {{ userDate }}
+        </li>
     </ul>
 </template>
 
 <script>
 import { fieldNames } from '@/apiOptions'
+import { timeStampToDate } from '@/methods'
 
 export default {
     name: 'VUserCard',
@@ -63,9 +67,16 @@ export default {
         },
         userPhone () {
             return this.data[fieldNames.USER.PHONE]
+        },
+        userDate () {
+            const date = this.getDate()
+            return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`
         }
     },
     methods: {
+        getDate () {
+            return timeStampToDate(this.data[fieldNames.USER.REGISTRATION_TIMESTAMP])
+        },
         setLoadPhotoStatus (status) {
             this.isUserPhotoError = !status
         }

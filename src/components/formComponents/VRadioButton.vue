@@ -5,6 +5,7 @@
             class="v-radio-button"
             :name="name"
             :value="data?.id"
+            :checked="checked"
             @input="$emit('onInput', data)"
         >
         <span class="custom-radio"/>
@@ -27,6 +28,10 @@ export default {
         name: {
             type: String,
             default: null
+        },
+        checked: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

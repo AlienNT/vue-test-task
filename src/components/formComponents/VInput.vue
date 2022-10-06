@@ -1,34 +1,47 @@
 <template>
-    <label class="v-label">
-        <input
-            class="v-input"
-            :type="type"
-            :value="value"
-            :placeholder="placeholder"
-            :readonly="readOnly"
-            :required="required"
-            :pattern="pattern"
-            :minlength="minLength"
-            :maxlength="manLength"
-            @input="e => $emit('onInput', e.target.value)"
-            @focus="onFocus"
-            @blur="onBlur"
-            @error="onError"
-        >
-        <span
-            class="label-text"
-            :class="{
+    <div
+        class="v-label__wrapper"
+        :class="{
+        'field-error': isError
+       }"
+    >
+        <label class="v-label">
+            <input
+                class="v-input"
+                :type="type"
+                :value="value"
+                :placeholder="placeholder"
+                :readonly="readOnly"
+                :required="required"
+                :pattern="pattern"
+                :minlength="minLength"
+                :maxlength="manLength"
+                @input="e => $emit('onInput', e.target.value)"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+            <span
+                class="label-text"
+                :class="{
                 'label-moved': isFocus || value?.length
             }"
-        >
-            {{ label }}
-        </span>
-    </label>
+            >
+                {{ label }}
+            </span>
+        </label>
+<!--        <VFieldError-->
+<!--            :error-message="errorMessage"-->
+<!--        />-->
+    </div>
 </template>
 
 <script>
+import { errorMixin } from '@/components/errorMixin'
+// import VFieldError from '@/components/formComponents/VFieldError'
+
 export default {
     name: 'VInput',
+    mixins: [errorMixin],
     props: {
         value: {
             type: [String, Number],
@@ -65,7 +78,14 @@ export default {
         manLength: {
             type: Number,
             default: null
+        },
+        isError: {
+            type: Boolean,
+            default: false
         }
+    },
+    components: {
+        // VFieldError
     },
     data () {
         return {
@@ -78,9 +98,6 @@ export default {
         },
         onBlur () {
             this.isFocus = false
-        },
-        onError (e) {
-            console.log('onError', e, this.value)
         }
     }
 }
@@ -89,8 +106,6 @@ export default {
 <style scoped lang="scss">
 .v-label {
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
 .label-text {
@@ -108,12 +123,14 @@ export default {
 .label-text, .v-input {
     background: $backgroundColor;
 }
+
 .label-moved {
     top: 0;
     transform: translateY(-50%);
     font-weight: 500;
     font-size: 12px;
 }
+
 .v-input {
     border: 1px solid #D0CFCF;
     border-radius: 4px;

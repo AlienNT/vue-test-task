@@ -8,6 +8,7 @@
             <VRadioButton
                 :data="option"
                 :name="name"
+                :checked="value === option?.id"
                 @onInput="e => $emit('onInput', e)"
             />
         </li>
@@ -36,6 +37,10 @@ export default {
         },
         name: {
             type: String,
+            default: null
+        },
+        value: {
+            type: Number,
             default: null
         }
     },

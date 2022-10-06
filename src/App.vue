@@ -22,6 +22,9 @@ export default {
     computed: {
         token () {
             return this.$store.getters['auth/GET_TOKEN']
+        },
+        localToken () {
+            return localStorage.getItem('Token')
         }
     },
     watch: {
@@ -37,7 +40,7 @@ export default {
         }
     },
     async created () {
-        console.log('getToken', await this.getToken())
+        await this.getToken()
     }
 }
 </script>
